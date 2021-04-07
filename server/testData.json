@@ -1,0 +1,30 @@
+// Team //
+{
+  "fullname": "",
+  "email": "",
+  "teamname": "",
+  "golfer1": "",
+  "golfer2": "",
+  "golfer3": "",
+  "golfer4": "",
+  "golfer5": "",
+  "paid": ""
+}
+
+// Golfer //
+{
+  "firstname": "",
+  "lastname": "",
+  "player_id": ""
+}
+
+
+// Leaderboard //
+{
+  "firstname": "",
+  "lastname": "",
+  "player_id": ,
+  "score": ,
+  "currentround": ,
+  "bonus": 0
+}

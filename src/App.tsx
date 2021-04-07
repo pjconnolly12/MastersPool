@@ -1,25 +1,52 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Homepage } from './components/homepage';
+import { NavBar } from './components/navbar';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import { Rules } from './components/rules';
+import { NewEntry } from './components/newEntry';
+import { Leaderboard } from './components/leaderboard';
+import { Picks } from './components/picks';
+import { Standings } from './components/standings';
+import { Chat } from './components/chat';
+import { Admin } from './components/admin';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+    <NavBar />
+    <Switch>
+      <Route path='/rules'>
+        <Rules />
+      </Route>
+      <Route path='/entry'>
+        <NewEntry />
+      </Route>
+      <Route path='/leaderboard'>
+        <Leaderboard />
+      </Route>
+      <Route path='/teams'>
+        <Picks />
+      </Route>
+      <Route path='/standings'>
+        <Standings />
+      </Route>
+      <Route path='/chat'>
+        <Chat />
+      </Route>
+      <Route path='/admin'>
+        <Admin />
+      </Route>
+      <Route path='/'>
+        <Homepage />
+      </Route>
+    </Switch>
+  </Router>
   );
 }
 
