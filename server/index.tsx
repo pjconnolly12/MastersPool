@@ -161,8 +161,6 @@ const updateLeaderboardList = async e => {
 //   }
 // }
 
-
-
 // const job = schedule.scheduleJob('*/1 * * * *', async function(){
 //   let autoUpdate = false;
 //   await axios.get('http://localhost:5000/autoUpdate',{
@@ -223,35 +221,36 @@ const updateLeaderboardList = async e => {
 
 // Get players eligble for bonus //
 
-// const updateBonus = async e => {
-//   try {
-//     const url = `http://localhost:5000/bonus/${e.player_id}`;
-//     const response = await fetch(url, {
-//       method: "PUT",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(e)
-//     });
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// axios.request(leaderboard).then(function (response) {
-//   const round = response.data.results.tournament.live_details.current_round - 1
-//   const max = response.data.results.leaderboard.reduce(function(prev, current) {
-//     return (prev.rounds[round].total_to_par < current.rounds[round].total_to_par) ? prev : current
-// }) //returns object
-//   const eligbleGolfers = response.data.results.leaderboard.filter(golfer => golfer.rounds[round].total_to_par === max.rounds[round].total_to_par)
-//   eligbleGolfers.forEach(golfer => {
-//     const golferData = {
-//       player_id: golfer.player_id,
-//     }
-//     updateBonus(golferData)
-//   });
-// }).catch(function (error) {
-// 	console.error(error);
-// });
-
+const bonusJob = schedule.scheduleJob('0 0 21 ? *, 3-7', async function(){
+  const updateBonus = async e => {
+    try {
+      const url = `http://localhost:5000/bonus/${e.player_id}`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(e)
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  axios.request(leaderboard).then(function (response) {
+    const round = response.data.results.tournament.live_details.current_round - 1
+    const max = response.data.results.leaderboard.reduce(function(prev, current) {
+      return (prev.rounds[round].total_to_par < current.rounds[round].total_to_par) ? prev : current
+  }) //returns object
+    const eligbleGolfers = response.data.results.leaderboard.filter(golfer => golfer.rounds[round].total_to_par === max.rounds[round].total_to_par)
+    eligbleGolfers.forEach(golfer => {
+      const golferData = {
+        player_id: golfer.player_id,
+      }
+      updateBonus(golferData)
+    });
+  }).catch(function (error) {
+    console.error(error);
+  });  
+})
 
 //Routes//
 

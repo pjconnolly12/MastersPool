@@ -4276,6 +4276,14 @@ video {
   background-image: linear-gradient(to top left, var(--tw-gradient-stops));
 }
 
+.bg-home-image {
+  background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/masters-clubhouse-1.jpg');
+}
+
+.bg-small-home-image {
+  background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/sm-masters-clubhouse.png');
+}
+
 .from-transparent {
   --tw-gradient-from: transparent;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0));
@@ -33185,6 +33193,14 @@ video {
     background-image: linear-gradient(to top left, var(--tw-gradient-stops));
   }
 
+  .sm\:bg-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/masters-clubhouse-1.jpg');
+  }
+
+  .sm\:bg-small-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/sm-masters-clubhouse.png');
+  }
+
   .sm\:from-transparent {
     --tw-gradient-from: transparent;
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0));
@@ -62049,6 +62065,14 @@ video {
 
   .md\:bg-gradient-to-tl {
     background-image: linear-gradient(to top left, var(--tw-gradient-stops));
+  }
+
+  .md\:bg-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/masters-clubhouse-1.jpg');
+  }
+
+  .md\:bg-small-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/sm-masters-clubhouse.png');
   }
 
   .md\:from-transparent {
@@ -90917,6 +90941,14 @@ video {
     background-image: linear-gradient(to top left, var(--tw-gradient-stops));
   }
 
+  .lg\:bg-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/masters-clubhouse-1.jpg');
+  }
+
+  .lg\:bg-small-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/sm-masters-clubhouse.png');
+  }
+
   .lg\:from-transparent {
     --tw-gradient-from: transparent;
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0));
@@ -119783,6 +119815,14 @@ video {
     background-image: linear-gradient(to top left, var(--tw-gradient-stops));
   }
 
+  .xl\:bg-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/masters-clubhouse-1.jpg');
+  }
+
+  .xl\:bg-small-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/sm-masters-clubhouse.png');
+  }
+
   .xl\:from-transparent {
     --tw-gradient-from: transparent;
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0));
@@ -148647,6 +148687,14 @@ video {
 
   .\32xl\:bg-gradient-to-tl {
     background-image: linear-gradient(to top left, var(--tw-gradient-stops));
+  }
+
+  .\32xl\:bg-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/masters-clubhouse-1.jpg');
+  }
+
+  .\32xl\:bg-small-home-image {
+    background-image: linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/sm-masters-clubhouse.png');
   }
 
   .\32xl\:from-transparent {
