@@ -1,14 +1,16 @@
 import React, {useState} from 'react';
 import { NavButton } from './navbar/button';
+import { Link } from 'react-router-dom'
+import logo from '../images/logo.png'
 
 export const NavBar = (): JSX.Element => {
 
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false)
 
-  const homepage = {
-    redirect: "/",
-    pageTitle: "Home" 
-  }
+  // const homepage = {
+  //   redirect: "/",
+  //   pageTitle: <img src={logo} />
+  // }
   const entry = {
     redirect: "/entry",
     pageTitle: "New Entry" 
@@ -66,11 +68,11 @@ export const NavBar = (): JSX.Element => {
 
   return (
     <>
-      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 mb-3">
+      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 border-b-4 border-secondary">
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
           <div className="w-full relative flex justify-between md:w-auto md:static md:block md:justify-start">
           <div className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-primary">
-                <NavButton {...homepage} />
+            <Link to="/"><img className="w-14" src={logo}/></Link>
           </div>
             <svg className=" h-10 mt-4 cursor-pointer leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block md:hidden outline-none focus:outline-none"
               type="button"

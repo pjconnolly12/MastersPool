@@ -88,10 +88,8 @@ module.exports = {
       'gradient-to-l': 'linear-gradient(to left, var(--tw-gradient-stops))',
       'gradient-to-tl':
         'linear-gradient(to top left, var(--tw-gradient-stops))',
-      'home-image':
-        "linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/masters-clubhouse-1.jpg')",
-      'small-home-image':
-        "linear-gradient(to right,rgba(black, 0.9),rgba(black, 0.7)),url('/src/images/sm-masters-clubhouse.png')",
+      'home-image': "url('/src/images/masters-clubhouse-1.jpg')",
+      'small-home-image': "url('/src/images/sm-masters-clubhouse.png')",
     },
     backgroundOpacity: (theme) => theme('opacity'),
     backgroundPosition: {

@@ -12,7 +12,7 @@ app.use(express.json());
 
 const apiKey = process.env.API_KEY
 
-//Golf API calls//
+// Golf API calls //
 
 //Get Entry List//
 
@@ -367,6 +367,17 @@ app.get('/entries', async (req, res) => {
   }
 });
 
+//Get Teams who have not paid
+
+app.get('/entries-paid', async (req, res) => {
+  try {
+    const team = await pool.query('SELECT * FROM entries WHERE paid = false ORDER BY fullname');
+    res.json(team.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //Get Standings//
 let sqlStandings = `SELECT
 entries.teamname,
@@ -451,6 +462,17 @@ app.put('/autoUpdate', async (req, res) => {
     const newStatus = req.body.newStatus;
     const update = await pool.query("UPDATE admin SET status = $1 WHERE setting = 'autoupdate'", [newStatus]);
     res.json(update);
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
+// Update Paid //
+app.put('/paid/:user', async (req, res) => {
+  try {
+    console.log(req.params.user)
+    const results = await pool.query('UPDATE entries SET paid = $1 where fullname = $2', [true, req.params.user]);
+    res.json(results);
   } catch (err) {
     console.error(err.message);
   }

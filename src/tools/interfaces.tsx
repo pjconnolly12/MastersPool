@@ -24,6 +24,7 @@ export interface IGolfer {
 }
 
 export interface ITeam {
+  entry_id: number
   fullname: string
   teamname: string
   golfer1: string
