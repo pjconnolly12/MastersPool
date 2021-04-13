@@ -30,7 +30,7 @@ export const Picks = (): JSX.Element => {
 
   const teamData = teams.map(team => {
     return (
-      <tr className="border-b-2 border-primary" key={team.teamname}>
+      <tr className={team.paid ? "border-b-2 border-primary" : "border-b-2 border-primary text-red-400"} key={team.teamname}>
         <td className="text-center">{team.teamname}</td>
         <td className="text-center">{team.fullname}</td>
         <td className="text-center">{team.golfer1}</td>

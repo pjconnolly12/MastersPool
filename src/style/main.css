@@ -11410,6 +11410,10 @@ video {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+.font-benton {
+  font-family: "Benton Sans", BentonSans, Arial, Helvetica, sans-serif;
+}
+
 .font-thin {
   font-weight: 100;
 }
@@ -40327,6 +40331,10 @@ video {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
+  .sm\:font-benton {
+    font-family: "Benton Sans", BentonSans, Arial, Helvetica, sans-serif;
+  }
+
   .sm\:font-thin {
     font-weight: 100;
   }
@@ -69199,6 +69207,10 @@ video {
 
   .md\:font-mono {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .md\:font-benton {
+    font-family: "Benton Sans", BentonSans, Arial, Helvetica, sans-serif;
   }
 
   .md\:font-thin {
@@ -98075,6 +98087,10 @@ video {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
+  .lg\:font-benton {
+    font-family: "Benton Sans", BentonSans, Arial, Helvetica, sans-serif;
+  }
+
   .lg\:font-thin {
     font-weight: 100;
   }
@@ -126949,6 +126965,10 @@ video {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
+  .xl\:font-benton {
+    font-family: "Benton Sans", BentonSans, Arial, Helvetica, sans-serif;
+  }
+
   .xl\:font-thin {
     font-weight: 100;
   }
@@ -155821,6 +155841,10 @@ video {
 
   .\32xl\:font-mono {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .\32xl\:font-benton {
+    font-family: "Benton Sans", BentonSans, Arial, Helvetica, sans-serif;
   }
 
   .\32xl\:font-thin {

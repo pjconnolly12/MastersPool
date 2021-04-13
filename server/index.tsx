@@ -341,7 +341,7 @@ app.post('/entries', async (req, res) => {
 })
 
 //Get Teams//
-let sqlTeams = `SELECT
+let sqlTeams = `SELECT DISTINCT
     entries.fullname,
 entries.teamname,
 CONCAT(golfer1.firstname, ' ', golfer1.lastname) AS "golfer1",

@@ -7,10 +7,6 @@ export const NavBar = (): JSX.Element => {
 
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false)
 
-  // const homepage = {
-  //   redirect: "/",
-  //   pageTitle: <img src={logo} />
-  // }
   const entry = {
     redirect: "/entry",
     pageTitle: "New Entry" 
@@ -39,32 +35,6 @@ export const NavBar = (): JSX.Element => {
     redirect: "/admin",
     pageTitle: "Admin"
   }
-
-
-  // return (
-  //   // #006747 Change navbar to Masters green
-  //   <div className=" flex-none bg-white">
-  //   <div className="flex items-start md:relative md:flex md:items-center md:justify-center h-16 z-10">
-  //     <svg className="h-7 m-4 md:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" type="button"
-  //             onClick={() => setNavbarOpen(!navbarOpen)}>
-  //       <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-  //     </svg>
-  //     <div className={
-  //             "md:flex flex-grow items-center" +
-  //             (navbarOpen ? " flex" : " hidden")
-  //           }>
-  //       <NavButton {...homepage} />
-  //       <NavButton {...entry} />
-  //       <NavButton {...standings} />
-  //       <NavButton {...picks} />
-  //       <NavButton {...leaderboard} />
-  //       <NavButton {...rules} />
-  //       <NavButton {...chat} />
-  //       <NavButton {...admin} />
-  //     </div>
-  //   </div>
-  // </div>
-  // );
 
   return (
     <>
@@ -106,9 +76,9 @@ export const NavBar = (): JSX.Element => {
               <li className="nav-item">
                 <NavButton {...chat} />
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavButton {...admin} />
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

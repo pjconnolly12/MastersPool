@@ -209,6 +209,13 @@ module.exports = {
         '"Courier New"',
         'monospace',
       ],
+      benton: [
+        '"Benton Sans"',
+        'BentonSans',
+        'Arial',
+        'Helvetica',
+        'sans-serif',
+      ],
     },
     fontSize: {
       xs: ['0.75rem', { lineHeight: '1rem' }],
