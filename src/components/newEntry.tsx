@@ -114,43 +114,43 @@ export const NewEntry = (): JSX.Element => {
   })
 
   return (
-    <div className=" flex w-full h-full bg-secondary justify-center">
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col m-6 md:w-1/3"> 
-      <label className="block text-sm font-medium text-gray-700">Full Name:</label>
-      <input name="fullName" type="text" ref={register({ required: true})} className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
+    <div className=" flex w-full h-auto justify-center">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col m-6 bg-primary rounded p-4 md:w-1/3 lg:p-8"> 
+      <label className="block text-sm font-medium text-secondary">Full Name:</label>
+      <input name="fullName" type="text" ref={register({ required: true})} className="p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
       {errors.fullName && <span>This field is required</span>}
-      <label className="block text-sm font-medium text-gray-700 mt-4">Email:</label>      
+      <label className="block text-sm font-medium text-secondary mt-4">Email:</label>      
       <input name="email" type="email" ref={register({ required: true, 
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               message: "invalid email address"
             } 
-      })} className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
+      })} className="mt-1 p-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
       {errors.email && <span>This field is required</span>}
-      <label className="block text-sm font-medium text-gray-700 mt-4">Team Name:</label>
-      <input name="teamName" type="text" ref={register({ required: true, maxLength: 25 })} className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
+      <label className="block text-sm font-medium text-secondary mt-4">Team Name:</label>
+      <input name="teamName" type="text" ref={register({ required: true, maxLength: 25 })} className="p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
       {errors.teamName && <span>This field is required</span>}
-      <label className="block text-sm font-medium text-gray-700 mt-4">Golfer 1:</label>
-      <select name="golfer1" ref={register({ required: true})}>
+      <label className="block text-sm font-medium text-secondary mt-4">Golfer 1:</label>
+      <select name="golfer1" ref={register({ required: true})} className="rounded mt-1 p-1">
         {picks}
       </select>
-      <label className="block text-sm font-medium text-gray-700 mt-4">Golfer 2:</label>
-      <select name="golfer2" ref={register({ required: true})}>
+      <label className="block text-sm font-medium text-secondary mt-4">Golfer 2:</label>
+      <select name="golfer2" ref={register({ required: true})} className="rounded mt-1 p-1">
         {picks}
       </select>
-      <label className="block text-sm font-medium text-gray-700 mt-4">Golfer 3:</label>
-      <select name="golfer3" ref={register({ required: true})}>
+      <label className="block text-sm font-medium text-secondary mt-4">Golfer 3:</label>
+      <select name="golfer3" ref={register({ required: true})} className="rounded mt-1 p-1">
         {picks}
       </select>
-      <label className="block text-sm font-medium text-gray-700 mt-4">Golfer 4:</label>
-      <select name="golfer4" ref={register({ required: true})}>
+      <label className="block text-sm font-medium text-secondary mt-4">Golfer 4:</label>
+      <select name="golfer4" ref={register({ required: true})} className="rounded mt-1 p-1">
         {picks}
       </select>
-      <label className="block text-sm font-medium text-gray-700 mt-4">Golfer 5:</label>
-      <select name="golfer5" ref={register({ required: true})}>
+      <label className="block text-sm font-medium text-secondary mt-4">Golfer 5:</label>
+      <select name="golfer5" ref={register({ required: true})} className="rounded mt-1 p-1">
         {picks}
       </select>
-      <input className="mt-4 rounded bg-primary text-white font-semibold" type="submit"  />
+      <input className="mt-8 rounded bg-secondary text-primary font-semibold" type="submit"  />
     </form>
     </div>
   )

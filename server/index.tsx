@@ -344,11 +344,11 @@ app.post('/entries', async (req, res) => {
 let sqlTeams = `SELECT DISTINCT
     entries.fullname,
 entries.teamname,
-CONCAT(golfer1.firstname, ' ', golfer1.lastname) AS "golfer1",
-CONCAT(golfer2.firstname, ' ', golfer2.lastname) AS "golfer2",
-CONCAT(golfer3.firstname, ' ', golfer3.lastname) AS "golfer3",
-CONCAT(golfer4.firstname, ' ', golfer4.lastname) AS "golfer4",
-CONCAT(golfer5.firstname, ' ', golfer5.lastname) AS "golfer5",
+CONCAT(LEFT(golfer1.firstname, 1), '. ', golfer1.lastname) AS "golfer1",
+CONCAT(LEFT(golfer2.firstname, 1), ', ', golfer2.lastname) AS "golfer2",
+CONCAT(LEFT(golfer3.firstname, 1), '. ', golfer3.lastname) AS "golfer3",
+CONCAT(LEFT(golfer4.firstname, 1), '. ', golfer4.lastname) AS "golfer4",
+CONCAT(LEFT(golfer5.firstname, 1), '. ', golfer5.lastname) AS "golfer5",
 entries.paid
 FROM
 entries

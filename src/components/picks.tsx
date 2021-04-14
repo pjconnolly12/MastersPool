@@ -31,20 +31,20 @@ export const Picks = (): JSX.Element => {
   const teamData = teams.map(team => {
     return (
       <tr className={team.paid ? "border-b-2 border-primary" : "border-b-2 border-primary text-red-400"} key={team.teamname}>
-        <td className="text-center">{team.teamname}</td>
-        <td className="text-center">{team.fullname}</td>
-        <td className="text-center">{team.golfer1}</td>
-        <td className="text-center">{team.golfer2}</td>
-        <td className="text-center">{team.golfer3}</td>
-        <td className="text-center">{team.golfer4}</td>
-        <td className="text-center">{team.golfer5}</td>
+        <td className="text-center whitespace-nowrap">{team.teamname}</td>
+        <td className="text-center whitespace-nowrap">{team.fullname}</td>
+        <td className="text-center whitespace-nowrap">{team.golfer1}</td>
+        <td className="text-center whitespace-nowrap">{team.golfer2}</td>
+        <td className="text-center whitespace-nowrap">{team.golfer3}</td>
+        <td className="text-center whitespace-nowrap">{team.golfer4}</td>
+        <td className="text-center whitespace-nowrap">{team.golfer5}</td>
       </tr>
     )
   }) 
 
   return (
-    <div className="flex justify-center mt-4">
-      <table className="w-4/5 sm:w-full text-sm">
+    <div className="flex m-4 overflow-auto">
+      <table className="w-full text-xs md:text-base">
         <tbody>
         <tr className="border-b-4 border-primary">
           <th>Team Name</th>
