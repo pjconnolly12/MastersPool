@@ -15,6 +15,8 @@ type Inputs = {
   golfer3: number, 
   golfer4: number,
   golfer5: number,
+  tiebreaker: string,
+  payment: string,
 }
 
 export const NewEntry = (): JSX.Element => {
@@ -63,6 +65,12 @@ export const NewEntry = (): JSX.Element => {
   const onSubmit = (data: Inputs) => {
     if (checkTopTen(data) && !checkDuplicates(data) ){
       console.log(data)
+      let tie;
+      if (data.tiebreaker === 'E'){
+        tie = 0
+      } else {
+        tie = data.tiebreaker
+      }
       axios
         .post("http://localhost:5000/entries", {
           fullname: data.fullName,
@@ -73,6 +81,8 @@ export const NewEntry = (): JSX.Element => {
           golfer3: data.golfer3, 
           golfer4: data.golfer4,
           golfer5: data.golfer5,
+          tiebreaker: tie,
+          payment: data.payment,
           paid: false
           })
         .then(function(response: Inputs | any) {
@@ -149,6 +159,14 @@ export const NewEntry = (): JSX.Element => {
       <label className="block text-sm font-medium text-secondary mt-4">Golfer 5:</label>
       <select name="golfer5" ref={register({ required: true})} className="rounded mt-1 p-1">
         {picks}
+      </select>
+      <label className="block text-sm font-medium text-secondary mt-4">Tiebreaker:</label>
+      <input name="tiebreaker" type="text" ref={register({ required: true, maxLength: 25 })} className="p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
+      {errors.teamName && <span>This field is required</span>}
+      <label className="block text-sm font-medium text-secondary mt-4">Payment Method:</label>
+      <select name="payment" ref={register({ required: true})} className="rounded mt-1 p-1">
+        <option>Venmo</option>
+        <option>Paypal</option>
       </select>
       <input className="mt-8 rounded bg-secondary text-primary font-semibold" type="submit"  />
     </form>

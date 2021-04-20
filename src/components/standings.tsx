@@ -44,12 +44,21 @@ export const Standings = (): JSX.Element => {
     } else {
       total = row.total
     }
+    let tie;
+    if (parseInt(row.tiebreaker) > 0) {
+      tie = "+" + row.tiebreaker
+    } else if (parseInt(row.tiebreaker) === 0){
+      tie = "E"
+    } else {
+      tie = row.tiebreaker
+    }
     return (
       <tr key={row.entry_id} className="border-b-2 border-primary" >
         <td>{row.teamname}</td>
         <td className="text-center lg:text-left">{score}</td>
         <td className="text-center lg:text-left">{row.total - row.rawtotal}</td>
         <td className="text-center lg:text-left">{total}</td>
+        <td className="text-center lg:text-left">{tie}</td>
       </tr>
     )
   }) 
@@ -63,6 +72,7 @@ export const Standings = (): JSX.Element => {
         <th>Raw Total</th>
         <th>Bonus</th>
         <th>Total</th>
+        <th>Tiebreaker</th>
       </tr>
       {standingsData}
       </tbody>

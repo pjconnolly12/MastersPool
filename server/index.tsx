@@ -329,10 +329,10 @@ app.put('/bonus/:id', async (req, res) => {
 //Add Team//
 app.post('/entries', async (req, res) => {
   try {
-    const { fullname, email, teamname, golfer1, golfer2, golfer3, golfer4, golfer5, paid } = req.body;
+    const { fullname, email, teamname, golfer1, golfer2, golfer3, golfer4, golfer5, paid, tiebreaker, payment } = req.body;
     const team = await pool.query(
-      'INSERT INTO entries (fullname, email, teamname, golfer1, golfer2, golfer3, golfer4, golfer5, paid) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-      [fullname, email, teamname, golfer1, golfer2, golfer3, golfer4, golfer5, paid]
+      'INSERT INTO entries (fullname, email, teamname, golfer1, golfer2, golfer3, golfer4, golfer5, paid, tiebreaker, payment) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
+      [fullname, email, teamname, golfer1, golfer2, golfer3, golfer4, golfer5, paid, tiebreaker, payment]
     );
     res.json(team.rows[0]);
   } catch (err) {
@@ -342,21 +342,41 @@ app.post('/entries', async (req, res) => {
 
 //Get Teams//
 let sqlTeams = `SELECT DISTINCT
-    entries.fullname,
+entries.fullname,
 entries.teamname,
-CONCAT(LEFT(golfer1.firstname, 1), '. ', golfer1.lastname) AS "golfer1",
-CONCAT(LEFT(golfer2.firstname, 1), ', ', golfer2.lastname) AS "golfer2",
-CONCAT(LEFT(golfer3.firstname, 1), '. ', golfer3.lastname) AS "golfer3",
-CONCAT(LEFT(golfer4.firstname, 1), '. ', golfer4.lastname) AS "golfer4",
-CONCAT(LEFT(golfer5.firstname, 1), '. ', golfer5.lastname) AS "golfer5",
-entries.paid
+CONCAT(golfer1.firstname, ' ', golfer1.lastname) AS "golfer1",
+golfer1score.score AS "golfer1score",
+golfer1bonus.bonus AS "golfer1bonus",
+CONCAT(golfer2.firstname, ' ', golfer2.lastname) AS "golfer2",
+golfer2score.score AS "golfer2score",
+golfer2bonus.bonus AS "golfer2bonus",
+CONCAT(golfer3.firstname, ' ', golfer3.lastname) AS "golfer3",
+golfer3score.score AS "golfer3score",
+golfer3bonus.bonus AS "golfer3bonus",
+CONCAT(golfer4.firstname, ' ', golfer4.lastname) AS "golfer4",
+golfer4score.score AS "golfer4score",
+golfer4bonus.bonus AS "golfer4bonus",
+CONCAT(golfer5.firstname, ' ', golfer5.lastname) AS "golfer5",
+golfer5score.score AS "golfer5score",
+golfer5bonus.bonus AS "golfer5bonus",
+entries.tiebreaker 
 FROM
 entries
 JOIN golfers golfer1 ON golfer1.player_id = entries.golfer1
 JOIN golfers golfer2 ON golfer2.player_id = entries.golfer2
 JOIN golfers golfer3 ON golfer3.player_id = entries.golfer3
 JOIN golfers golfer4 ON golfer4.player_id = entries.golfer4
-JOIN golfers golfer5 ON golfer5.player_id = entries.golfer5;`
+JOIN golfers golfer5 ON golfer5.player_id = entries.golfer5
+JOIN leaderboard golfer1score ON golfer1score.player_id = entries.golfer1
+JOIN leaderboard golfer2score ON golfer2score.player_id = entries.golfer2
+JOIN leaderboard golfer3score ON golfer3score.player_id = entries.golfer3
+JOIN leaderboard golfer4score ON golfer4score.player_id = entries.golfer4
+JOIN leaderboard golfer5score ON golfer5score.player_id = entries.golfer5
+JOIN leaderboard golfer1bonus ON golfer1bonus.player_id = entries.golfer1
+JOIN leaderboard golfer2bonus ON golfer2bonus.player_id = entries.golfer2
+JOIN leaderboard golfer3bonus ON golfer3bonus.player_id = entries.golfer3
+JOIN leaderboard golfer4bonus ON golfer4bonus.player_id = entries.golfer4
+JOIN leaderboard golfer5bonus ON golfer5bonus.player_id = entries.golfer5;`
 
 app.get('/entries', async (req, res) => {
   try {
@@ -382,6 +402,7 @@ app.get('/entries-paid', async (req, res) => {
 let sqlStandings = `SELECT
 entries.teamname,
 entries.entry_id,
+entries.tiebreaker,
 golfer1score.score AS "golfer1score",
 golfer2score.score AS "golfer2score",
 golfer3score.score AS "golfer3score",
