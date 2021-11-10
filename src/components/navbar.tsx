@@ -73,12 +73,12 @@ export const NavBar = (): JSX.Element => {
               <li className="nav-item">
                 <NavButton {...rules} />
               </li>
-              <li className="nav-item">
-                <NavButton {...chat} />
-              </li>
               {/* <li className="nav-item">
-                <NavButton {...admin} />
+                <NavButton {...chat} />
               </li> */}
+              <li className="nav-item">
+                <NavButton {...admin} />
+              </li>
             </ul>
           </div>
         </div>

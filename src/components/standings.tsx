@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { IStanding } from './../tools/interfaces';
+import { IStanding, ITeam } from './../tools/interfaces';
+import {TeamModal} from './teamModal'
 import axios from 'axios'
 
 export const Standings = (): JSX.Element => {
 
 
   const [standings, setStandings] = useState<IStanding[]>([])
+  const [teamModalVisible, toggleTeamModalVisible] = useState(false)
+  const [entryID, updateEntryID] = useState<number>()
+  const [teamView, updateTeamView] = useState<ITeam[]>([])
 
   useEffect(() =>  {
     axios
@@ -26,6 +30,34 @@ export const Standings = (): JSX.Element => {
           console.log(error)
       });
   }, [])
+
+
+  const selectTeam = async (id:number) => {
+    toggleTeamModalVisible(true)
+    await axios
+      .get<ITeam[]>(`http://localhost:5000/entries/${id}`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+      })
+      .then(response => {
+        updateTeamView(response.data);
+        console.log(response.data)
+      })
+      .catch(ex => {
+        const error =
+        ex.response.status === 404
+          ? "Resource not found"
+          : "An unexpected error has occurred";
+          console.log(error)
+      });
+}
+
+  const buttonClick = {
+    toggleOff: toggleTeamModalVisible,
+    toggle: teamModalVisible,
+    team: teamView
+  }
 
   const standingsData = standings.map(row => {
     let score;
@@ -53,17 +85,22 @@ export const Standings = (): JSX.Element => {
       tie = row.tiebreaker
     }
     return (
+      <>
       <tr key={row.entry_id} className="border-b-2 border-primary" >
-        <td>{row.teamname}</td>
+        {/* Onclick event to update state - teamModal Visible - pass entry_id to child component */}
+        <td className={"cursor-pointer"} onClick={() => {selectTeam(row.entry_id)}}>{row.teamname}</td>
         <td className="text-center lg:text-left">{score}</td>
         <td className="text-center lg:text-left">{row.total - row.rawtotal}</td>
         <td className="text-center lg:text-left">{total}</td>
         <td className="text-center lg:text-left">{tie}</td>
       </tr>
+      </>
     )
   }) 
 
   return (
+    <>
+    <TeamModal {...buttonClick}/>
     <div className="flex justify-center m-2 md:m-4">
     <table className="w-4/5 text-xs md:text-base md:w-3/4">
       <tbody>
@@ -78,5 +115,6 @@ export const Standings = (): JSX.Element => {
       </tbody>
     </table>
   </div>
+  </>
   );
 }

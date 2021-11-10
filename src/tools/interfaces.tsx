@@ -1,3 +1,5 @@
+import { SetStateAction } from "react";
+
 export interface IAction {
   type: string
   payload: any
@@ -10,6 +12,12 @@ export interface IState {
 export interface INavButtonProps {
   redirect: string
   pageTitle: string
+}
+
+export interface ITeamModalClick {
+  toggleOff: any,
+  toggle: boolean
+  team: ITeam[]
 }
 
 export interface ITopTen {

@@ -272,7 +272,7 @@ app.post('/golfers', async (req, res) => {
 //get golfers//
 app.get('/golfers', async (req, res) => {
   try {
-    const golfers = await pool.query('SELECT * FROM golfers');
+    const golfers = await pool.query('SELECT DISTINCT * FROM golfers');
     res.json(golfers.rows);
   } catch (err) {
     console.error(err.message);
@@ -319,7 +319,7 @@ app.get('/leaderboard', async (req, res) => {
 
 app.put('/bonus/:id', async (req, res) => {
   try {
-    const results = await pool.query('UPDATE leaderboard SET bonus = $1 where player_id = $2', [-2, req.params.id]);
+    const results = await pool.query('UPDATE leaderboard SET bonus = bonus - $1 where player_id = $2', [2, req.params.id]);
     res.json(results);
   } catch (err) {
     console.error(err.message);
@@ -386,6 +386,53 @@ app.get('/entries', async (req, res) => {
     console.error(err.message);
   }
 });
+
+let sqlTeamSelect = `SELECT DISTINCT
+entries.fullname,
+entries.teamname,
+CONCAT(golfer1.firstname, ' ', golfer1.lastname) AS "golfer1",
+golfer1score.score AS "golfer1score",
+golfer1bonus.bonus AS "golfer1bonus",
+CONCAT(golfer2.firstname, ' ', golfer2.lastname) AS "golfer2",
+golfer2score.score AS "golfer2score",
+golfer2bonus.bonus AS "golfer2bonus",
+CONCAT(golfer3.firstname, ' ', golfer3.lastname) AS "golfer3",
+golfer3score.score AS "golfer3score",
+golfer3bonus.bonus AS "golfer3bonus",
+CONCAT(golfer4.firstname, ' ', golfer4.lastname) AS "golfer4",
+golfer4score.score AS "golfer4score",
+golfer4bonus.bonus AS "golfer4bonus",
+CONCAT(golfer5.firstname, ' ', golfer5.lastname) AS "golfer5",
+golfer5score.score AS "golfer5score",
+golfer5bonus.bonus AS "golfer5bonus",
+entries.tiebreaker 
+FROM
+entries
+JOIN golfers golfer1 ON golfer1.player_id = entries.golfer1
+JOIN golfers golfer2 ON golfer2.player_id = entries.golfer2
+JOIN golfers golfer3 ON golfer3.player_id = entries.golfer3
+JOIN golfers golfer4 ON golfer4.player_id = entries.golfer4
+JOIN golfers golfer5 ON golfer5.player_id = entries.golfer5
+JOIN leaderboard golfer1score ON golfer1score.player_id = entries.golfer1
+JOIN leaderboard golfer2score ON golfer2score.player_id = entries.golfer2
+JOIN leaderboard golfer3score ON golfer3score.player_id = entries.golfer3
+JOIN leaderboard golfer4score ON golfer4score.player_id = entries.golfer4
+JOIN leaderboard golfer5score ON golfer5score.player_id = entries.golfer5
+JOIN leaderboard golfer1bonus ON golfer1bonus.player_id = entries.golfer1
+JOIN leaderboard golfer2bonus ON golfer2bonus.player_id = entries.golfer2
+JOIN leaderboard golfer3bonus ON golfer3bonus.player_id = entries.golfer3
+JOIN leaderboard golfer4bonus ON golfer4bonus.player_id = entries.golfer4
+JOIN leaderboard golfer5bonus ON golfer5bonus.player_id = entries.golfer5
+WHERE entry_id = $1;`
+
+app.get('/entries/:id', async (req, res) => {
+  try {
+    const team = await pool.query(sqlTeamSelect, [req.params.id]);
+    res.json(team.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+})
 
 //Get Teams who have not paid
 
@@ -498,6 +545,19 @@ app.put('/paid/:user', async (req, res) => {
     console.error(err.message);
   }
 })
+
+//Update Ace or Albatross
+app.put('/bonus5/:id', async (req, res) => {
+  try {
+    console.log(req.params.id)
+    const results = await pool.query('UPDATE leaderboard SET bonus = bonus - $1 where player_id = $2 ', [5, req.params.id]);
+    res.json(results);
+  } catch (err) {
+    console.error(err.message)
+  }
+})
+
+
 
 app.listen(5000, () => {
   console.log('server has started on port 5000');

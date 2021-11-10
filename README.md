@@ -19,3 +19,7 @@ node-fetch
 ### API's used
 
 The site utilizes Rapid-API's golf tracking endpoints
+
+### Starting the App
+
+npm run dev will start client and server concurrently
