@@ -7,6 +7,12 @@ export const TeamModal = (props:ITeamModalClick): JSX.Element => {
   const teamData = props.team.map(team => {
     return (
       <>
+      <th className="text-base m-0 fixed top-1 left-2 underline text-primary">{team.teamname}</th>
+      <tr className="border-b-4 border-primary">
+          <th>Golfer</th>
+          <th>Score</th>
+          <th>Bonus</th>
+      </tr>
       <tr className="h-auto">
         <td className="whitespace-normal md:whitespace-nowrap">{team.golfer1}</td>
         <td className="text-center whitespace-nowrap">{team.golfer1score}</td>
@@ -34,25 +40,20 @@ export const TeamModal = (props:ITeamModalClick): JSX.Element => {
       </tr>
       </>
     )
-  }) 
+  })
 
   const closeWindow = () => {
     props.toggleOff(false)
   }
 
   return (
-    <div className={"p-3 w-3/4 text-xs absolute inset-0 z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-secondary rounded md:w-1/2 " + (props.toggle ? "flex" : "hidden")}>
-      <table className="w-full">
+    <div className={"flex p-3 w-3/4 text-xs absolute inset-0 z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-secondary rounded md:w-1/2 " + (props.toggle ? "flex" : "hidden")}>
+      <table className="w-full table-auto">
         <tbody>
-        <tr className="border-b-4 border-primary">
-          <th>Golfer</th>
-          <th>Score</th>
-          <th>Bonus</th>
-        </tr>
         {teamData}
         </tbody>
       </table>
-      <button className="fixed top-2 right-2" onClick={() => closeWindow()}>X</button>
+      <button className="fixed top-2 right-2 text-primary font-extrabold" onClick={() => closeWindow()}>X</button>
     </div>
   );
 }
