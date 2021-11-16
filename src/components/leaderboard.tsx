@@ -28,28 +28,42 @@ export const Leaderboard = (): JSX.Element => {
 
   const leaderboardData = leaderboard.map(golfer => {
     const first = golfer.firstname.slice(0,1);
-    let score;
-    if (golfer.score > 0) {
-      score = "+" + golfer.score
-    } else if (golfer.score === 0) {
-      score = "E"
-    } else {
-      score = golfer.score
-    }
     let currentRound;
-    if (golfer.currentround > 0) {
-      currentRound = "+" + golfer.currentround
-    } else if (golfer.currentround === 0) {
-      currentRound = "E"
+    let score;
+    let thru;
+    if (golfer.player_status == 'cut') {
+      currentRound = "Cut"
+      thru = "-"
+      if (golfer.score > 0) {
+        score = "+" + golfer.score
+      } else if (golfer.score === 0) {
+        score = "E"
+      } else {
+        score = golfer.score
+      }
     } else {
-      currentRound = golfer.currentround
+      thru = golfer.holes_played
+      if (golfer.score > 0) {
+        score = "+" + golfer.score
+      } else if (golfer.score === 0) {
+        score = "E"
+      } else {
+        score = golfer.score
+      }
+      if (golfer.currentround > 0) {
+        currentRound = "+" + golfer.currentround
+      } else if (golfer.currentround === 0) {
+        currentRound = "E"
+      } else {
+        currentRound = golfer.currentround
+      }
     }
     return (
       <tr key={golfer.player_id} className="border-b-2 border-primary" >
         <td>{first}. {golfer.lastname}</td>
         <td className="text-center lg:text-left">{score}</td>
         <td className="text-center lg:text-left">{currentRound}</td>
-        <td className="text-center lg:text-left">{golfer.holes_played}</td>
+        <td className="text-center lg:text-left">{thru}</td>
       </tr>
     )
   }) 

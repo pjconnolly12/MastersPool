@@ -49,7 +49,7 @@ ALTER COLUMN player_id TYPE INTEGER;
 
 INSERT INTO entries (fullname, email, teamname, golfer1, golfer2, golfer3, golfer4, golfer5) VALUES($1, $2, $3, $4, $5, $6, $7, $8)
 
-SELECT DISTINCT
+SELECT
 	entries.fullname,
 	entries.teamname,
 	CONCAT(golfer1.firstname, ' ', golfer1.lastname) AS "golfer1",
@@ -70,21 +70,24 @@ SELECT DISTINCT
   entries.tiebreaker 
 FROM
 	entries
-JOIN golfers golfer1 ON golfer1.player_id = entries.golfer1
-JOIN golfers golfer2 ON golfer2.player_id = entries.golfer2
-JOIN golfers golfer3 ON golfer3.player_id = entries.golfer3
-JOIN golfers golfer4 ON golfer4.player_id = entries.golfer4
-JOIN golfers golfer5 ON golfer5.player_id = entries.golfer5
-JOIN leaderboard golfer1score ON golfer1score.player_id = entries.golfer1
-JOIN leaderboard golfer2score ON golfer2score.player_id = entries.golfer2
-JOIN leaderboard golfer3score ON golfer3score.player_id = entries.golfer3
-JOIN leaderboard golfer4score ON golfer4score.player_id = entries.golfer4
-JOIN leaderboard golfer5score ON golfer5score.player_id = entries.golfer5
-JOIN leaderboard golfer1bonus ON golfer1bonus.player_id = entries.golfer1
-JOIN leaderboard golfer2bonus ON golfer2bonus.player_id = entries.golfer2
-JOIN leaderboard golfer3bonus ON golfer3bonus.player_id = entries.golfer3
-JOIN leaderboard golfer4bonus ON golfer4bonus.player_id = entries.golfer4
-JOIN leaderboard golfer5bonus ON golfer5bonus.player_id = entries.golfer5;
+ JOIN golfers golfer1 ON golfer1.player_id = entries.golfer1
+ JOIN golfers golfer2 ON golfer2.player_id = entries.golfer2
+ JOIN golfers golfer3 ON golfer3.player_id = entries.golfer3
+ JOIN golfers golfer4 ON golfer4.player_id = entries.golfer4
+ JOIN golfers golfer5 ON golfer5.player_id = entries.golfer5
+ JOIN leaderboard golfer1score ON golfer1score.player_id = entries.golfer1
+ JOIN leaderboard golfer2score ON golfer2score.player_id = entries.golfer2
+ JOIN leaderboard golfer3score ON golfer3score.player_id = entries.golfer3
+ JOIN leaderboard golfer4score ON golfer4score.player_id = entries.golfer4
+ JOIN leaderboard golfer5score ON golfer5score.player_id = entries.golfer5
+ JOIN leaderboard golfer1bonus ON golfer1bonus.player_id = entries.golfer1
+ JOIN leaderboard golfer2bonus ON golfer2bonus.player_id = entries.golfer2
+ JOIN leaderboard golfer3bonus ON golfer3bonus.player_id = entries.golfer3
+ JOIN leaderboard golfer4bonus ON golfer4bonus.player_id = entries.golfer4
+ JOIN leaderboard golfer5bonus ON golfer5bonus.player_id = entries.golfer5;
+
+ SELECT
+  entries.teamname,
 
 
 SELECT
@@ -160,3 +163,14 @@ OR golfer2.firstname LIKE $1 OR golfer2.lastname LIKE $1
 OR golfer3.firstname LIKE $1 OR golfer3.lastname LIKE $1
 OR golfer4.firstname LIKE $1 OR golfer4.lastname LIKE $1
 OR golfer5.firstname LIKE $1 OR golfer5.lastname LIKE $1;
+
+
+DELETE FROM golfers
+WHERE player_id IN
+    (SELECT player_id
+    FROM 
+        (SELECT player_id,
+         ROW_NUMBER() OVER( PARTITION BY firstname
+        ORDER BY  player_id ) AS row_num
+        FROM golfers ) t
+        WHERE t.row_num > 1 );

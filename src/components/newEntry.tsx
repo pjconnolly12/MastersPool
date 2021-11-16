@@ -168,7 +168,7 @@ export const NewEntry = (): JSX.Element => {
         <option>Venmo</option>
         <option>Paypal</option>
       </select>
-      <input className="mt-8 rounded bg-secondary text-primary font-semibold" type="submit"  />
+      <input className="mt-8 rounded bg-secondary text-primary font-semibold cursor-pointer" type="submit"  />
     </form>
     </div>
   )

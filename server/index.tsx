@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const pool = require('./db');
 const axios = require('axios').default
-// const fetch = require("node-fetch");
+const fetch = require("node-fetch");
 const schedule = require('node-schedule')
 require('dotenv').config();
 
@@ -18,24 +18,24 @@ const apiKey = process.env.API_KEY
 
 const players = {
   method: 'GET',
-  url: 'https://golf-leaderboard-data.p.rapidapi.com/entry-list/279',
+  url: 'https://golf-leaderboard-data.p.rapidapi.com/entry-list/370',
   headers: {
     'x-rapidapi-key': apiKey,
     'x-rapidapi-host': 'golf-leaderboard-data.p.rapidapi.com'
   }
 };
 
-// const createEntryList = async e => {
-//   try {
-//     const response = await fetch("http://localhost:5000/golfers", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(e)
-//     });
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+const createEntryList = async e => {
+  try {
+    const response = await fetch("http://localhost:5000/golfers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(e)
+    });
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // axios.request(players).then(function (response) {
 //   console.log(response.data.results.entry_list)
@@ -53,29 +53,30 @@ const players = {
 
 //Get Top Ten//
 
-// const options = {
-//   method: 'GET',
-//   url: 'https://golf-leaderboard-data.p.rapidapi.com/world-rankings',
-//   headers: {
-//     'x-rapidapi-key': apiKey,
-//     'x-rapidapi-host': 'golf-leaderboard-data.p.rapidapi.com'
-//   }
-// };
+const options = {
+  method: 'GET',
+  url: 'https://golf-leaderboard-data.p.rapidapi.com/world-rankings',
+  headers: {
+    'x-rapidapi-key': apiKey,
+    'x-rapidapi-host': 'golf-leaderboard-data.p.rapidapi.com'
+  }
+};
 
-// const createTopTen = async e => {
-//   try {
-//     const response = await fetch("http://localhost:5000/topten", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(e)
-//     });
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+const createTopTen = async e => {
+  try {
+    const response = await fetch("http://localhost:5000/topten", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(e)
+    });
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // axios.request(options).then(function (response) {
 //   const topten = []
+//   console.log(topten)
 //   for (let i = 0; i < 10; i++){
 //     topten.push(response.data.results.rankings[i])
 //   }
@@ -95,24 +96,24 @@ const players = {
 
 const leaderboard = {
   method: 'GET',
-  url: 'https://golf-leaderboard-data.p.rapidapi.com/leaderboard/278',
+  url: 'https://golf-leaderboard-data.p.rapidapi.com/leaderboard/370',
   headers: {
     'x-rapidapi-key': apiKey,
     'x-rapidapi-host': 'golf-leaderboard-data.p.rapidapi.com'
   }
 };
 
-// const createLeaderboardList = async e => {
-//   try {
-//     const response = await fetch("http://localhost:5000/leaderboard", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(e)
-//     });
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+const createLeaderboardList = async e => {
+  try {
+    const response = await fetch("http://localhost:5000/leaderboard", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(e)
+    });
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // axios.request(leaderboard).then(function (response) {
 //   console.log(response.data.results.leaderboard)
@@ -219,6 +220,43 @@ const updateLeaderboardList = async e => {
 // 	console.error(error);
 // });
 
+// update Cut Players in Leaderboard - Just need to run the axios script in the evening after the 2nd round 
+
+const updateLeaderboardListCut = async e => {
+  try {
+    const url = `http://localhost:5000/leaderboard/cut/${e.player_id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(e)
+    });
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// axios.get("http://localhost:5000/leaderboard", {
+//   headers: {
+//     "Content-Type": "application/json"
+//   },
+// })
+// .then(response => {
+//   response.data.results.leaderboard.forEach(golfer => {
+//         const golferData = {
+//           player_id: golfer.player_id,
+//           score: golfer.total_to_par,
+//         }
+//   updateLeaderboardListCut(golferData);
+// })
+// .catch(ex => {
+//   const error =
+//   ex.response.status === 404
+//     ? "Resource not found"
+//     : "An unexpected error has occurred";
+//     console.log(error)
+//   })
+// });
+
 // Get players eligble for bonus //
 
 const bonusJob = schedule.scheduleJob('0 0 21 ? *, 3-7', async function(){
@@ -305,10 +343,22 @@ app.put('/leaderboard/:id', async (req, res) => {
   }
 })
 
+// //update leaderboard for cut players//
+app.put('/leaderboard/cut/:id', async (req, res) => {
+  try {
+    const status = 'cut'
+    const { score } = req.body;
+    const results = await pool.query('UPDATE leaderboard SET score = $1 + $1 + 4 WHERE player_id = $3 AND player_status = $2', [score, status, req.params.id]);
+    res.json(results);
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
 //Get leaderboard//
 app.get('/leaderboard', async (req, res) => {
   try {
-    const leaderboard = await pool.query('SELECT firstname, lastname, player_id, score, currentround, holes_played, player_status FROM leaderboard ORDER BY score ASC');
+    const leaderboard = await pool.query('SELECT firstname, lastname, player_id, score, currentround, holes_played, player_status FROM leaderboard ORDER BY player_status, score ASC');
     res.json(leaderboard.rows);
   } catch (err) {
     console.error(err.message);
@@ -608,6 +658,60 @@ app.get('/entries/search/:value', async (req, res) => {
     console.error(err.message);
   }
 })
+
+// Build Entries
+app.get('/leaderboard/golferIds', async (req, res) => {
+  try {
+    const golferList = await pool.query('SELECT player_id FROM leaderboard');
+    res.json(golferList.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// const createTeams = (data) => {
+//   for (let i = 0; i < 50; i++ ){
+//   axios
+//         .post("http://localhost:5000/entries", {
+//           fullname: "name" + i,
+//           email: "test" + i + "@test.com",
+//           teamname: "team" + i,
+//           golfer1: data[Math.floor(Math.random() * data.length)].player_id, 
+//           golfer2: data[Math.floor(Math.random() * data.length)].player_id, 
+//           golfer3: data[Math.floor(Math.random() * data.length)].player_id, 
+//           golfer4: data[Math.floor(Math.random() * data.length)].player_id,
+//           golfer5: data[Math.floor(Math.random() * data.length)].player_id,
+//           tiebreaker: -5,
+//           payment: "venmo",
+//           paid: false
+//           })
+//         .then(function(response) {
+//           console.log(response)
+//         })
+//         .catch(function (error) {
+//           console.log(error);
+//         });
+//       }
+// }
+
+// axios.request("http://localhost:5000/leaderboard/golferIds", {
+//         headers: {
+//           "Content-Type": "application/json"
+//         },
+//       })
+//       .then(response => {
+//         createTeams(response.data)
+//         console.log(response.data[34].player_id)
+//       })
+//       .catch(ex => {
+//         const error =
+//         ex.response.status === 404
+//           ? "Resource not found"
+//           : "An unexpected error has occurred";
+//           console.log(error)
+//       });
+
+
 
 
 app.listen(5000, () => {
