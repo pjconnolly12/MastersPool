@@ -18,7 +18,7 @@ const apiKey = process.env.API_KEY
 
 const players = {
   method: 'GET',
-  url: 'https://golf-leaderboard-data.p.rapidapi.com/entry-list/370',
+  url: 'https://golf-leaderboard-data.p.rapidapi.com/entry-list/371',
   headers: {
     'x-rapidapi-key': apiKey,
     'x-rapidapi-host': 'golf-leaderboard-data.p.rapidapi.com'
@@ -96,7 +96,7 @@ const createTopTen = async e => {
 
 const leaderboard = {
   method: 'GET',
-  url: 'https://golf-leaderboard-data.p.rapidapi.com/leaderboard/370',
+  url: 'https://golf-leaderboard-data.p.rapidapi.com/leaderboard/371',
   headers: {
     'x-rapidapi-key': apiKey,
     'x-rapidapi-host': 'golf-leaderboard-data.p.rapidapi.com'
@@ -509,9 +509,9 @@ golfer1bonus.bonus AS "golfer1bonus",
 golfer2bonus.bonus AS "golfer2bonus",
 golfer3bonus.bonus AS "golfer3bonus",
 golfer4bonus.bonus AS "golfer4bonus",
-golfer5bonus.bonus AS "golfer5bonus", 
+golfer5bonus.bonus AS "golfer5bonus",
 SUM(COALESCE(golfer1score.score,0) + COALESCE(golfer2score.score,0) + COALESCE(golfer3score.score,0) + COALESCE(golfer4score.score,0) + COALESCE(golfer5score.score,0) - GREATEST(golfer1score.score, golfer2score.score, golfer3score.score, golfer4score.score, golfer5score.score)) AS "rawtotal",
-SUM(COALESCE(golfer1score.score,0) + COALESCE(golfer2score.score,0) + COALESCE(golfer3score.score,0) + COALESCE(golfer4score.score,0) + COALESCE(golfer5score.score,0) + COALESCE(golfer1bonus.bonus,0) + COALESCE(golfer2bonus.bonus,0) + COALESCE(golfer3bonus.bonus,0) + COALESCE(golfer4bonus.bonus,0) + COALESCE(golfer5bonus.bonus,0) - GREATEST(golfer1score.score, golfer2score.score, golfer3score.score, golfer4score.score, golfer5score.score)) AS "total"
+SUM(COALESCE(golfer1score.score + golfer1bonus.bonus,0) + COALESCE(golfer2score.score + golfer2bonus.bonus,0) + COALESCE(golfer3score.score + golfer3bonus.bonus,0) + COALESCE(golfer4score.score + golfer4bonus.bonus,0) + COALESCE(golfer5score.score + golfer5bonus.bonus,0) - GREATEST(golfer1score.score + golfer1bonus.bonus, golfer2score.score + golfer2bonus.bonus, golfer3score.score + golfer3bonus.bonus, golfer4score.score + golfer4bonus.bonus, golfer5score.score + golfer5bonus.bonus)) AS "total"
 FROM
 entries
 JOIN leaderboard golfer1score ON golfer1score.player_id = entries.golfer1
@@ -526,7 +526,8 @@ JOIN leaderboard golfer4bonus ON golfer4bonus.player_id = entries.golfer4
 JOIN leaderboard golfer5bonus ON golfer5bonus.player_id = entries.golfer5
 GROUP BY entries.teamname,entries.entry_id,golfer1score.score, golfer2score.score, golfer3score.score, golfer4score.score, golfer5score.score,
 golfer1bonus.bonus, golfer2bonus.bonus, golfer3bonus, golfer4bonus.bonus, golfer5bonus.bonus
-ORDER BY SUM(COALESCE(golfer1score.score,0) + COALESCE(golfer2score.score,0) + COALESCE(golfer3score.score,0) + COALESCE(golfer4score.score,0) + COALESCE(golfer5score.score,0) + COALESCE(golfer1bonus.bonus,0) + COALESCE(golfer2bonus.bonus,0) + COALESCE(golfer3bonus.bonus,0) + COALESCE(golfer4bonus.bonus,0) + COALESCE(golfer5bonus.bonus,0) - GREATEST(golfer1score.score, golfer2score.score, golfer3score.score, golfer4score.score, golfer5score.score)) ASC;`
+ORDER BY SUM(COALESCE(golfer1score.score + golfer1bonus.bonus,0) + COALESCE(golfer2score.score + golfer2bonus.bonus,0) + COALESCE(golfer3score.score + golfer3bonus.bonus,0) + COALESCE(golfer4score.score + golfer4bonus.bonus,0) + COALESCE(golfer5score.score + golfer5bonus.bonus,0) - GREATEST(golfer1score.score + golfer1bonus.bonus, golfer2score.score + golfer2bonus.bonus, golfer3score.score + golfer3bonus.bonus, golfer4score.score + golfer4bonus.bonus, golfer5score.score + golfer5bonus.bonus)) ASC;
+`
 
 app.get('/standings', async (req, res) => {
   try {
@@ -671,17 +672,24 @@ app.get('/leaderboard/golferIds', async (req, res) => {
 
 // const createTeams = (data) => {
 //   for (let i = 0; i < 50; i++ ){
-//   axios
+//     let golfers = [...data]
+//     let golferArray = []
+//     for (let i = 0; i < 5; i++) {
+//       const random = Math.floor(Math.random() * golfers.length);
+//       const golfer = golfers.splice(random, 1)[0];
+//       golferArray.push(golfer)
+//     }
+//     axios
 //         .post("http://localhost:5000/entries", {
 //           fullname: "name" + i,
 //           email: "test" + i + "@test.com",
 //           teamname: "team" + i,
-//           golfer1: data[Math.floor(Math.random() * data.length)].player_id, 
-//           golfer2: data[Math.floor(Math.random() * data.length)].player_id, 
-//           golfer3: data[Math.floor(Math.random() * data.length)].player_id, 
-//           golfer4: data[Math.floor(Math.random() * data.length)].player_id,
-//           golfer5: data[Math.floor(Math.random() * data.length)].player_id,
-//           tiebreaker: -5,
+//           golfer1: golferArray[0].player_id, 
+//           golfer2: golferArray[1].player_id, 
+//           golfer3: golferArray[2].player_id, 
+//           golfer4: golferArray[3].player_id,
+//           golfer5: golferArray[4].player_id,
+//           tiebreaker: -8,
 //           payment: "venmo",
 //           paid: false
 //           })
@@ -701,7 +709,6 @@ app.get('/leaderboard/golferIds', async (req, res) => {
 //       })
 //       .then(response => {
 //         createTeams(response.data)
-//         console.log(response.data[34].player_id)
 //       })
 //       .catch(ex => {
 //         const error =

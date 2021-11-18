@@ -70,9 +70,24 @@ export interface IStanding {
   rawtotal: number
   total: number
   tiebreaker: string
+  golfer1score: number
+  golfer1bonus: number
+  golfer2score: number
+  golfer2bonus: number
+  golfer3score: number
+  golfer3bonus: number
+  golfer4score: number
+  golfer4bonus: number
+  golfer5score: number
+  golfer5bonus: number
 }
 
 export interface IAutoUpdate {
   setting: string
   status: boolean
+}
+
+export interface ITotalScore {
+  score: number
+  bonus: number
 }

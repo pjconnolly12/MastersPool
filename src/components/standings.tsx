@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { IStanding, ITeam } from './../tools/interfaces';
+import { IStanding, ITeam, ITotalScore } from './../tools/interfaces';
 import {TeamModal} from './teamModal'
 import axios from 'axios'
+import { getConfigFileParsingDiagnostics } from 'typescript';
 
 export const Standings = (): JSX.Element => {
 
@@ -20,7 +21,6 @@ export const Standings = (): JSX.Element => {
       })
       .then(response => {
         setStandings(response.data);
-        console.log(response.data)
       })
       .catch(ex => {
         const error =
@@ -42,7 +42,6 @@ export const Standings = (): JSX.Element => {
       })
       .then(response => {
         updateTeamView(response.data);
-        console.log(response.data)
       })
       .catch(ex => {
         const error =
@@ -84,13 +83,56 @@ export const Standings = (): JSX.Element => {
     } else {
       tie = row.tiebreaker
     }
+
+    let golfer1 = {
+      score: row.golfer1score + row.golfer1bonus,
+      bonus: row.golfer1bonus
+    }
+    let golfer2 = {
+      score: row.golfer2score + row.golfer2bonus,
+      bonus: row.golfer2bonus
+    }
+    let golfer3 = {
+      score: row.golfer3score + row.golfer3bonus,
+      bonus: row.golfer3bonus
+    }
+    let golfer4 = {
+      score: row.golfer4score + row.golfer4bonus,
+      bonus: row.golfer4bonus
+    }
+    let golfer5 = {
+      score: row.golfer5score + row.golfer5bonus,
+      bonus: row.golfer5bonus
+    }
+
+    function compare(a: ITotalScore , b: ITotalScore) {
+      const scoreA = a.score
+      const scoreB = b.score
+    
+      let comparison = 0;
+      if (scoreA > scoreB) {
+        comparison = 1;
+      } else if (scoreA < scoreB) {
+        comparison = -1;
+      }
+      return comparison;
+    }
+
+    let golfers = [golfer1, golfer2, golfer3, golfer4, golfer5]
+    golfers.sort(compare)
+    golfers.pop()
+
+    let bonusTotal = golfers.reduce(function(accumulator, currentValue) {
+      return accumulator + currentValue.bonus;
+    }, 0)
+
     return (
       <>
       <tr key={row.entry_id} className="border-b-2 border-primary" >
         {/* Onclick event to update state - teamModal Visible - pass entry_id to child component */}
         <td className={"cursor-pointer"} onClick={() => {selectTeam(row.entry_id)}}>{row.teamname}</td>
         <td className="text-center lg:text-left">{score}</td>
-        <td className="text-center lg:text-left">{row.total - row.rawtotal}</td>
+        <td className="text-center lg:text-left">{bonusTotal}</td>
         <td className="text-center lg:text-left">{total}</td>
         <td className="text-center lg:text-left">{tie}</td>
       </tr>
