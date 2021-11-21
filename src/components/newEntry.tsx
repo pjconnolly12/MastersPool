@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { ITopTen, IGolfer } from "./../tools/interfaces"
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'
 
 //Add useEffect to pull the topten and the entry list//
 //Ensure that each one has the ID's included in the data so they can compare//
@@ -59,6 +60,11 @@ export const NewEntry = (): JSX.Element => {
       });
   }, [])
 
+  let history = useHistory();
+
+  const redirect = () => {
+    history.push('/thanks')
+  }
   
 
   const { register, handleSubmit, errors } = useForm<Inputs>();
@@ -91,6 +97,7 @@ export const NewEntry = (): JSX.Element => {
         .catch(function (error) {
           console.log(error);
         });
+        redirect()
     } else {
       window.alert("Please check your team for duplicates or for being over the limit of 2 top ten players, thanks!")
     }
@@ -168,7 +175,7 @@ export const NewEntry = (): JSX.Element => {
         <option>Venmo</option>
         <option>Paypal</option>
       </select>
-      <input className="mt-8 rounded bg-secondary text-primary font-semibold cursor-pointer" type="submit"  />
+      <input className="mt-8 rounded bg-secondary text-primary font-semibold cursor-pointer" type="submit" />
     </form>
     </div>
   )

@@ -14,6 +14,7 @@ import { Picks } from './components/picks';
 import { Standings } from './components/standings';
 // import { ChatComponent } from './components/chatPage';
 import { Admin } from './components/admin';
+import { Thanks } from './components/thanks';
 
 
 function App() {
@@ -42,6 +43,9 @@ function App() {
       </Route> */}
       <Route path='/admin'>
         <Admin />
+      </Route>
+      <Route path='/thanks'>
+        <Thanks />
       </Route>
       <Route path='/'>
         <Homepage />

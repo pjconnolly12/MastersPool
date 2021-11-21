@@ -150,17 +150,19 @@ const updateLeaderboardList = async e => {
   }
 }
 
-// const getAutoUpdateStatus = async () => {
-//   try {
-//     const url = 'http://localhost:5000/autoUpdate';
-//     const response = await fetch(url, {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     })
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+const getAutoUpdateStatus = async () => {
+  try {
+    const url = 'http://localhost:5000/autoUpdate';
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// ***Auto Update the Leaderboard if Autoupdate is toggled on***
 
 // const job = schedule.scheduleJob('*/1 * * * *', async function(){
 //   let autoUpdate = false;
@@ -202,23 +204,54 @@ const updateLeaderboardList = async e => {
 //   }
 // })
 
- 
+// ***No autoupdate*** 
+
 // axios.request(leaderboard).then(function (response) {
-//   // console.log(response.data.results.leaderboard)
 //   response.data.results.leaderboard.forEach(golfer => {
-//     const round = golfer.current_round - 1;
-//     const golferData = {
-//       player_id: golfer.player_id,
-//       score: golfer.total_to_par,
-//       currentround: golfer.rounds[round].total_to_par,
-//       holes_played: golfer.holes_played,
-//       player_status: golfer.status
+//     if (golfer.Status === 'active') {
+//       console.log(golfer.total_to_par, golfer.last_name)
+//       const round = golfer.current_round - 1;
+//       const golferData = {
+//         player_id: golfer.player_id,
+//         score: golfer.total_to_par,
+//         currentround: golfer.rounds[round].total_to_par,
+//         holes_played: golfer.holes_played,
+//         player_status: golfer.status
+//       }
+//       updateLeaderboardList(golferData)
 //     }
-//     updateLeaderboardList(golferData)
 //   });
 // }).catch(function (error) {
 // 	console.error(error);
 // });
+
+// Update Player Status
+// axios.request(leaderboard).then(function (response) {
+//   response.data.results.leaderboard.forEach(golfer => {
+//     const golferData = {
+//       player_id: golfer.player_id,
+//       score: golfer.total_to_par,
+//       holes_played: golfer.holes_played,
+//       player_status: golfer.status
+//     }
+//     updateLeaderboardPlayerStatus(golferData)
+//   });
+// }).catch(function (error) {
+// 	console.error(error);
+// });
+
+const updateLeaderboardPlayerStatus = async e => {
+  try {
+    const url = `http://localhost:5000/leaderboard/status/${e.player_id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(e)
+    });
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 // update Cut Players in Leaderboard - Just need to run the axios script in the evening after the 2nd round 
 
@@ -241,10 +274,10 @@ const updateLeaderboardListCut = async e => {
 //   },
 // })
 // .then(response => {
-//   response.data.results.leaderboard.forEach(golfer => {
+//   response.data.forEach(golfer => {
 //         const golferData = {
 //           player_id: golfer.player_id,
-//           score: golfer.total_to_par,
+//           score: golfer.score,
 //         }
 //   updateLeaderboardListCut(golferData);
 // })
@@ -255,6 +288,19 @@ const updateLeaderboardListCut = async e => {
 //     : "An unexpected error has occurred";
 //     console.log(error)
 //   })
+// });
+
+// axios.request(leaderboard).then(function (response) {
+//   response.data.results.leaderboard.forEach(golfer => {
+//     const golferData = {
+//       player_id: golfer.player_id,
+//       score: golfer.total_to_par,
+//     }
+//     console.log(golferData)
+// updateLeaderboardListCut(golferData);
+//   });
+// }).catch(function (error) {
+// 	console.error(error);
 // });
 
 // Get players eligble for bonus //
@@ -335,8 +381,20 @@ app.post('/leaderboard', async (req, res) => {
 app.put('/leaderboard/:id', async (req, res) => {
   try {
     const status = 'active'
+    console.log(req.body)
     const { score, currentround, holes_played, player_status} = req.body;
     const results = await pool.query('UPDATE leaderboard SET score = $1, currentround = $2, holes_played = $3, player_status = $4 where player_id = $6 AND player_status = $5', [score, currentround, holes_played, player_status, status, req.params.id]);
+    res.json(results);
+  } catch (err) {
+    console.error(err.message);
+  }
+})
+
+// update player status
+app.put('/leaderboard/status/:id', async (req, res) => {
+  try {
+    const { player_status, player_id } = req.body;
+    const results = await pool.query('UPDATE leaderboard SET player_status = $1 where player_id = $2', [player_status, player_id]);
     res.json(results);
   } catch (err) {
     console.error(err.message);
@@ -348,7 +406,8 @@ app.put('/leaderboard/cut/:id', async (req, res) => {
   try {
     const status = 'cut'
     const { score } = req.body;
-    const results = await pool.query('UPDATE leaderboard SET score = $1 + $1 + 4 WHERE player_id = $3 AND player_status = $2', [score, status, req.params.id]);
+    const newScore = score + score + 4
+    const results = await pool.query('UPDATE leaderboard SET score = $1 WHERE player_id = $3 AND player_status = $2', [newScore, status, req.params.id]);
     res.json(results);
   } catch (err) {
     console.error(err.message);
@@ -358,7 +417,7 @@ app.put('/leaderboard/cut/:id', async (req, res) => {
 //Get leaderboard//
 app.get('/leaderboard', async (req, res) => {
   try {
-    const leaderboard = await pool.query('SELECT firstname, lastname, player_id, score, currentround, holes_played, player_status FROM leaderboard ORDER BY player_status, score ASC');
+    const leaderboard = await pool.query('SELECT firstname, lastname, player_id, score, currentround, holes_played, player_status FROM leaderboard ORDER BY player_status, score ASC, holes_played DESC');
     res.json(leaderboard.rows);
   } catch (err) {
     console.error(err.message);
