@@ -61,8 +61,8 @@ export const Leaderboard = (): JSX.Element => {
     return (
       <tr key={golfer.player_id} className="border-b-2 border-primary" >
         <td>{first}. {golfer.lastname}</td>
-        <td className="text-center lg:text-left">{score}</td>
-        <td className="text-center lg:text-left">{currentRound}</td>
+        <td className={`text-center lg:text-left" ${score < 0 ? 'text-red-500' : 'text-black'}`}>{score}</td>
+        <td className={`text-center lg:text-left" ${currentRound < 0 ? 'text-red-500' : 'text-black'}`}>{currentRound}</td>
         <td className="text-center lg:text-left">{thru}</td>
       </tr>
     )

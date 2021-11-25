@@ -131,9 +131,9 @@ export const Standings = (): JSX.Element => {
       <tr key={row.entry_id} className="border-b-2 border-primary" >
         {/* Onclick event to update state - teamModal Visible - pass entry_id to child component */}
         <td className={"cursor-pointer"} onClick={() => {selectTeam(row.entry_id)}}>{row.teamname}</td>
-        <td className="text-center lg:text-left">{score}</td>
+        <td className={`text-center lg:text-left ${score < 0 ? 'text-red-500' : 'text-black'}`}>{score}</td>
         <td className="text-center lg:text-left">{bonusTotal}</td>
-        <td className="text-center lg:text-left">{total}</td>
+        <td className={`text-center lg:text-left ${total < 0 ? 'text-red-500' : 'text-black'}`}>{total}</td>
         <td className="text-center lg:text-left">{tie}</td>
       </tr>
       </>

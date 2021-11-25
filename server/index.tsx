@@ -226,6 +226,7 @@ const getAutoUpdateStatus = async () => {
 // });
 
 // Update Player Status
+
 // axios.request(leaderboard).then(function (response) {
 //   response.data.results.leaderboard.forEach(golfer => {
 //     const golferData = {
