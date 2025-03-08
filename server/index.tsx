@@ -357,6 +357,7 @@ app.post('/golfers', async (req, res) => {
 //get golfers//
 app.get('/golfers', async (req, res) => {
   try {
+    console.log(pool)
     const golfers = await pool.query('SELECT DISTINCT * FROM golfers');
     res.json(golfers.rows);
   } catch (err) {
@@ -591,6 +592,7 @@ ORDER BY SUM(COALESCE(golfer1score.score + golfer1bonus.bonus,0) + COALESCE(golf
 
 app.get('/standings', async (req, res) => {
   try {
+    console.log(pool)
     const standings = await pool.query(sqlStandings);
     res.json(standings.rows);
   } catch (err) {
